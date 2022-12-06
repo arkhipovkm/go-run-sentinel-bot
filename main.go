@@ -181,12 +181,14 @@ func PerformChecks(tsdbRef string, api api.QueryAPI, bot *tgbotapi.BotAPI) error
 			}
 			if resultV > 0 {
 				text := fmt.Sprintf(
-					"Aberration found: item %s #%d of run %s (%s) shows high baseline humidity: RH = %f.2f (> %.2f)\nhttps://hub.aryballe.com/clouddb?tsdb_ref_name=%s&selected_runs=%s@%s",
-					item.Name, item.Cycle, item.RunID, item.Name, v, HUMIDITY_VALUE_THRESHOLD,
+					"Aberration found: item <b>%s #%d</b> of run <b>%s (%s)</b> shows high baseline humidity: RH = <b>%.2f (> %.2f)</b>\n<a href=\"https://hub.aryballe.com/clouddb?tsdb_ref_name=%s&selected_runs=%s@%s\">Link to DOH</a>",
+					item.Name, item.Cycle, run.ID, run.Name, v, HUMIDITY_VALUE_THRESHOLD,
 					INFLUX_DB_CONFIG.Name, INFLUX_DB_CONFIG.Name, run.UID,
 				)
 				fmt.Print(text)
-				_, err := bot.Send(tgbotapi.NewMessageToChannel(botapi.TELEGRAM_BOT_CHANNEL_USERNAME, text))
+				msg := tgbotapi.NewMessageToChannel(botapi.TELEGRAM_BOT_CHANNEL_USERNAME, text)
+				msg.ParseMode = tgbotapi.ModeHTML
+				_, err := bot.Send(msg)
 				if err != nil {
 					log.Println(err)
 				}
@@ -198,11 +200,14 @@ func PerformChecks(tsdbRef string, api api.QueryAPI, bot *tgbotapi.BotAPI) error
 				}
 				if resultD > 0 {
 					text := fmt.Sprintf(
-						"Aberration found: item %s #%d of run %s (%s) registered high variation of humidity compared to previous measurement: dRH = %.2f (> %.2f)\nhttps://hub.aryballe.com/clouddb?tsdb_ref_name=%s&selected_runs=%s@%s",
-						item.Name, item.Cycle, item.RunID, item.Name, d, HUMIDITY_DELTA_THRESHOLD,
+						"Aberration found: item <b>%s #%d of run %s (%s)</b> registered high variation of humidity compared to previous measurement: dRH = <b>%.2f (> %.2f)</b>\n<a href=\"https://hub.aryballe.com/clouddb?tsdb_ref_name=%s&selected_runs=%s@%s\">Link to DOH</a>",
+						item.Name, item.Cycle, run.ID, run.Name, d, HUMIDITY_DELTA_THRESHOLD,
 						INFLUX_DB_CONFIG.Name, INFLUX_DB_CONFIG.Name, run.UID,
 					)
-					_, err := bot.Send(tgbotapi.NewMessageToChannel(botapi.TELEGRAM_BOT_CHANNEL_USERNAME, text))
+					fmt.Print(text)
+					msg := tgbotapi.NewMessageToChannel(botapi.TELEGRAM_BOT_CHANNEL_USERNAME, text)
+					msg.ParseMode = tgbotapi.ModeHTML
+					_, err := bot.Send(msg)
 					if err != nil {
 						log.Println(err)
 					}

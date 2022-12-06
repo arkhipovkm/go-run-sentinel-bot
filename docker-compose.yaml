@@ -5,7 +5,7 @@ services:
     image: eu.gcr.io/aryballe-olfactive-library/go.run-sentinel.tgbot
     restart: always
     volumes:
-      - ./storage:/var/lib/storage
+      - ./storage:/home/app/storage
     environment:
       INFLUX_DB_NAME: firmenich
       INFLUX_DB_URL: https://europe-west1-1.gcp.cloud2.influxdata.com/
