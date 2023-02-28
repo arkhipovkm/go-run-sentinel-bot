@@ -108,9 +108,10 @@ func SendEmail(body string) error {
 
 	// _, err = fmt.Fprintf(wc, "This is the email body")
 	subject := "Subject: Run Sentinel Bot Alert"
+	to := fmt.Sprintf("To: %s", SMTP_RECEPIENT)
 	mime := "MIME-version: 1.0;\nContent-Type: text/html; charset=\"UTF-8\";"
 	htmlBody := fmt.Sprintf("<html><body>%s</body></html>", body)
-	_, err = wc.Write([]byte(fmt.Sprintf("%s\n%s\n\n%s", subject, mime, htmlBody)))
+	_, err = wc.Write([]byte(fmt.Sprintf("%s\n%s\n%s\n\n%s", subject, to, mime, htmlBody)))
 	if err != nil {
 		return err
 	}
