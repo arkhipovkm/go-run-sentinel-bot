@@ -192,6 +192,11 @@ func PerformChecks(tsdbRef string, api api.QueryAPI, bot *tgbotapi.BotAPI) error
 				if err != nil {
 					log.Println(err)
 				}
+				log.Println("Attempting to send the alert by email..")
+				err = botapi.SendEmail(text)
+				if err != nil {
+					log.Println(err)
+				}
 			}
 			if len(previousFrames) != 0 {
 				resultD, d, err := CheckHumidityDelta(previousFrames, currentFrames)
