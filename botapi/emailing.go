@@ -17,8 +17,6 @@ var (
 	SMTP_RECEPIENT string
 )
 func init() {
-	
-
 	SMTP_SERVERNAME = os.Getenv("SMTP_SERVERNAME")
 	if SMTP_SERVERNAME == "" {
 		log.Fatalln("no SMTP_SERVERNAME env var provided")
@@ -109,7 +107,7 @@ func SendEmail(body string) error {
 	}
 
 	// _, err = fmt.Fprintf(wc, "This is the email body")
-	_, err = wc.Write([]byte(fmt.Sprintf("From: Run Sentinel Bot\r\nSubject: Test Message\r\n%s", body)))
+	_, err = wc.Write([]byte(fmt.Sprintf("Subject: Run Sentinel Bot Alert\r\n\r\n%s", body)))
 	if err != nil {
 		return err
 	}
